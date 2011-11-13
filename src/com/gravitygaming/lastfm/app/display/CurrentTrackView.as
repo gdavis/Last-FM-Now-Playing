@@ -1,4 +1,5 @@
 package com.gravitygaming.lastfm.app.display {
+	import com.factorylabs.orange.core.display.FButton;
 	import com.factorylabs.orange.core.display.FSprite;
 	import com.factorylabs.orange.core.display.FTextField;
 	import com.factorylabs.orange.core.display.fills.GradientFill;
@@ -114,10 +115,10 @@ package com.gravitygaming.lastfm.app.display {
 			// center text
 			textContainer.y = height * .5 - textContainer.height * .5;
 			
-			// functionality
-			this.useHandCursor = true;
-			this.mouseEnabled = true;
-			this.addEventListener( MouseEvent.CLICK, handleClick);
+			// functionality			
+			var btn :FButton = new FButton(this);
+			new FRectangle( btn.graphics, 0,0,this.width, this.height, new SolidFill(0xff00ff, 0));
+			btn.addEventListener( MouseEvent.CLICK, handleClick);
 		}
 		
 		private function drawBg() :void
