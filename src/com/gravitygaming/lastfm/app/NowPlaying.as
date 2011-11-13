@@ -38,22 +38,31 @@ package com.gravitygaming.lastfm.app {
 		{			
 			
 			trace("\n\n*** Tracks updated! ***");
-			var currentTrackData :Object = $json['recenttracks']['track'][0];
-			var currentTrackView :CurrentTrackView = new CurrentTrackView( currentTrackData, this, { x:2, y:2, alpha:0 });
-			_currentTracks.unshift(currentTrackView);
+			var tracks :Array = $json['recenttracks']['track'];		
+			var dl :int;
+			var i: int;
 		
 			// remove last
-			if(_currentTracks.length > MAX_TRACKS) {
+			if(_currentTracks.length == MAX_TRACKS) {
 				
 				var lastTrack :CurrentTrackView = _currentTracks.pop();
 				lastTrack.active = false;
 				TweenLite.to(lastTrack, 1, { alpha:0, onComplete:lastTrack.remove, ease:Expo.easeInOut });
 			}
 			
+			// create new tracks
+			var delta : int = MAX_TRACKS - _currentTracks.length;
+			for (i = delta-1; i >= 0; i--) 
+			{
+				var currentTrackData :Object = tracks[i];
+				var currentTrackView :CurrentTrackView = new CurrentTrackView( currentTrackData, this, { x:2, y:2, alpha:0 });
+				_currentTracks.unshift(currentTrackView);
+			}
+			
 			// reposition list
-			var dl : int = _currentTracks.length;
+			dl = _currentTracks.length;
 			var dx :int = 2;
-			for (var i : int = 0; i < dl; i++) 
+			for (i = 0; i < dl; i++) 
 			{
 				var trackView :CurrentTrackView = _currentTracks[i];
 				trackView.active = i == 0 ? true :false;
