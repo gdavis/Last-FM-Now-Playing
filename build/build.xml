@@ -107,7 +107,7 @@
           <arg value="-debug=${param.isDebug}"/>
           <arg value="-benchmark=${param.isDebug}"/>
           <arg value="-verbose-stacktraces=${param.isDebug}"/>
-          <arg value="-incremental=true"/>
+          <arg value="-incremental=false"/>
           <arg value="-use-network=true"/>
           <arg value="-as3=true"/>
           <arg value="-optimize=true"/>

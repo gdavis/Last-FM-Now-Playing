@@ -21,7 +21,7 @@ package com.gravitygaming.lastfm.app.net {
 		private var _url	:String;
 		private var _loader	:LoadItem;
 		private var _isLoading	:Boolean;
-		private var _cachedResponse	:String;
+		private var _lastSongName	:String;
 		
 		public function RecentTracksMonitor( $apiKey :String, $user :String ) {
 			
@@ -30,7 +30,7 @@ package com.gravitygaming.lastfm.app.net {
 			_timer.addEventListener( TimerEvent.TIMER, handleTimerTick );
 			
 			_updateSignal = new Signal( Object );
-			_cachedResponse = "";
+			_lastSongName = "";
 		}
 
 		public function startMonitoring() :void
@@ -77,13 +77,18 @@ package com.gravitygaming.lastfm.app.net {
 		
 		private function handleComplete( $loader :LoadItem ) :void {
 			_isLoading = false;
-			
-			if (_cachedResponse.length != $loader.textContent.length) {
 				
-				_cachedResponse = $loader.textContent;
-				
+			try {
 				var decoder :JSONDecoder = new JSONDecoder( $loader.textContent, false);
-				_updateSignal.dispatch( decoder.getValue() );	
+				var json :Object = decoder.getValue();
+				var firstSong :String = json['recenttracks']['track'][0]['name'];
+				if( _lastSongName != firstSong ) {
+					_lastSongName = firstSong;
+					_updateSignal.dispatch( json );	
+				}
+			}
+			catch ( $e :* ) {
+				// hide erro
 			}
 			
 			destroyLoader();

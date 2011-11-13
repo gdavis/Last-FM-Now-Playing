@@ -123,7 +123,7 @@ package com.gravitygaming.lastfm.app.display {
 		private function drawBg() :void
 		{
 			this.graphics.clear();
-			var borderColor :uint = _active ? 0x9c0000 : 0x000000;
+			var borderColor :uint = _active ? 0xff5a00 : 0x000000;
 			var borderSize :uint = _active ? 2 : 1;
 			new FRectRound( this.graphics, 0, 0, _textX + _textWidth + PADDING * 2, HEIGHT, new GradientFill(90, [0xa7b0b9,0x828b94,0xa7b0b9],[1,1,1],[0,127,255]), 10);
 			new FRectRound( this.graphics, 0, 0, _textX + _textWidth + PADDING * 2, HEIGHT, new SolidStroke( borderColor, .5, borderSize, false), 10);
