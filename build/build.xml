@@ -112,6 +112,7 @@
           <arg value="-as3=true"/>
           <arg value="-optimize=true"/>
           <arg value="-show-actionscript-warnings=true"/>
+      	  <arg value="-static-link-runtime-shared-libraries=true" />
       </java>
       <echo>[-compile-mxmlc] MXMLC compiled</echo>
   </target>

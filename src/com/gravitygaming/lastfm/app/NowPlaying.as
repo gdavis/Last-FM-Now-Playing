@@ -1,5 +1,4 @@
 package com.gravitygaming.lastfm.app {
-	import com.factorylabs.orange.core.display.FTextField;
 	import com.gravitygaming.lastfm.app.display.CurrentTrackView;
 	import com.gravitygaming.lastfm.app.net.RecentTracksMonitor;
 	import com.greensock.TweenLite;
@@ -8,9 +7,6 @@ package com.gravitygaming.lastfm.app {
 	import flash.display.MovieClip;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
-	import flash.filters.DropShadowFilter;
-	import flash.text.TextFieldAutoSize;
-	import flash.text.TextFormat;
 
 	/**
 	 * @author grantdavis
@@ -19,9 +15,11 @@ package com.gravitygaming.lastfm.app {
 		
 		private static const API_KEY		:String = "cb8a8cc5c1d8a7285bef4e0ab9e07534";
 		private static const USER			:String = "GravityGaming";
+		private static const MAX_TRACKS		:uint = 4;
+		private static const TRACK_PADDING	:int = 5;
 		
 		private var _recentTracksMonitor	:RecentTracksMonitor;
-		private var _currentTrack			:CurrentTrackView;
+		private var _currentTracks			:Array;
 		
 		public function NowPlaying() {
 			super();
@@ -33,30 +31,35 @@ package com.gravitygaming.lastfm.app {
 			_recentTracksMonitor.updateSignal.add(handleTracksUpdate);
 			_recentTracksMonitor.startMonitoring();
 			
-			var tf :FTextField = new FTextField(this, { x:2, alpha:.5 });
-			tf.defaultTextFormat = new TextFormat("Arial", 12, 0xffffff, true );
-			tf.autoSize = TextFieldAutoSize.LEFT;
-			tf.text = "NOW PLAYING";
-			tf.embedFonts = false;
-			tf.filters = [new DropShadowFilter( 1, 45, 0x000000, 1, 1, 1)];
+			_currentTracks = new Array();
 		}
 
 		private function handleTracksUpdate( $json :Object ) :void
 		{			
 			
 			trace("\n\n*** Tracks updated! ***");
-			
-			// hide previous track
-			var hasPrevious :Boolean = false;
-			if (_currentTrack) {
-				TweenLite.to(_currentTrack, 1, { alpha: 0, ease:Expo.easeInOut });
-				hasPrevious = true;
+			var currentTrackData :Object = $json['recenttracks']['track'][0];
+			var currentTrackView :CurrentTrackView = new CurrentTrackView( currentTrackData, this, { x:2, y:2, alpha:0 });
+			_currentTracks.unshift(currentTrackView);
+		
+			// remove last
+			if(_currentTracks.length > MAX_TRACKS) {
+				
+				var lastTrack :CurrentTrackView = _currentTracks.pop();
+				lastTrack.active = false;
+				TweenLite.to(lastTrack, 1, { alpha:0, onComplete:lastTrack.remove, ease:Expo.easeInOut });
 			}
 			
-			// grab the first track and display it.
-			var currentTrackData :Object = $json['recenttracks']['track'][0];
-			_currentTrack = new CurrentTrackView( currentTrackData, this, { y:18, alpha:0 });
-			TweenLite.to(_currentTrack, 1, { delay: hasPrevious ? 1 : 0, alpha:1, ease:Expo.easeInOut });
+			// reposition list
+			var dl : int = _currentTracks.length;
+			var dx :int = 2;
+			for (var i : int = 0; i < dl; i++) 
+			{
+				var trackView :CurrentTrackView = _currentTracks[i];
+				trackView.active = i == 0 ? true :false;
+				TweenLite.to(trackView, 1, { x:dx, alpha:1, delay: i==0 ? 1 : 0, ease:Expo.easeInOut });
+				dx += trackView.width + TRACK_PADDING;
+			}
 		}
 	}
 }

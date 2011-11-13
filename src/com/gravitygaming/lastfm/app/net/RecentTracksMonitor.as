@@ -25,7 +25,7 @@ package com.gravitygaming.lastfm.app.net {
 		
 		public function RecentTracksMonitor( $apiKey :String, $user :String ) {
 			
-			_url = "http://ws.audioscrobbler.com/2.0/?method=user.getRecentTracks&format=json&api_key=" + $apiKey + "&user=" + $user;
+			_url = "http://ws.audioscrobbler.com/2.0/?method=user.getRecentTracks&format=json&limit=4&api_key=" + $apiKey + "&user=" + $user;
 			_timer = new Timer( 1000 * 15 );
 			_timer.addEventListener( TimerEvent.TIMER, handleTimerTick );
 			
