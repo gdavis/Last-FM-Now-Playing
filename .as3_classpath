@@ -10,4 +10,5 @@
     <AS3Classpath generateProblems="false" type="source" useAsSharedCode="false">CS5_UI</AS3Classpath>
     <AS3Classpath generateProblems="false" type="lib" useAsSharedCode="false">libs/as3corelib.swc</AS3Classpath>
     <AS3Classpath generateProblems="false" type="lib" useAsSharedCode="false">libs/as3-signals.swc</AS3Classpath>
+    <AS3Classpath generateProblems="false" type="lib" useAsSharedCode="false">libs/greensock.swc</AS3Classpath>
 </AS3Classpath>
